@@ -167,20 +167,21 @@ class Tacotron():
 														  speaker_size=hp.speaker_num)
 					predict_speaker_labels = speaker_classify(encoder_outputs, hp.grad_rev_scale)
 
-					# Variational AutoEncoder
-					if is_training:
-						VAE_cell = VAECell(VAEConvolutions(is_training, hparams=hp, scope='VAE_convolutions'),
-										   VAERNN(is_training, layers=hp.VAE_lstm_num_layers,
-												  size=hp.VAE_lstm_layer_size,
-												  zoneout=hp.tacotron_zoneout_rate, scope='VAE_LSTM'), hp.VAE_pool_size, hp.VAE_D_size)
-						residual_encoding, self.kl_div, self.D_mean, self.D_var = VAE_cell(tower_mel_targets[i], hp.tacotron_batch_size)
+					# # Variational AutoEncoder
+					# if is_training:
+					# 	VAE_cell = VAECell(VAEConvolutions(is_training, hparams=hp, scope='VAE_convolutions'),
+					# 					   VAERNN(is_training, layers=hp.VAE_lstm_num_layers,
+					# 							  size=hp.VAE_lstm_layer_size,
+					# 							  zoneout=hp.tacotron_zoneout_rate, scope='VAE_LSTM'), hp.VAE_pool_size, hp.VAE_D_size)
+					# 	residual_encoding, self.kl_div, self.D_mean, self.D_var = VAE_cell(tower_mel_targets[i], hp.tacotron_batch_size)
 
-					elif is_evaluating:
-						residual_encoding,self.kl_div = tf.zeros([hp.tacotron_batch_size, hp.VAE_D_size], dtype=tf.float32), 0
-					else:
-						residual_encoding = tf.zeros([hp.tacotron_synthesis_batch_size, hp.VAE_D_size],
-													 dtype=tf.float32)
-					self.residual_encoding=residual_encoding
+					# elif is_evaluating:
+					# 	residual_encoding,self.kl_div = tf.zeros([hp.tacotron_batch_size, hp.VAE_D_size], dtype=tf.float32), 0
+					# else:
+					# 	residual_encoding = tf.zeros([hp.tacotron_synthesis_batch_size, hp.VAE_D_size],
+					# 								 dtype=tf.float32)
+					# self.residual_encoding=residual_encoding
+
 					#Decoder Parts
 					#Attention Decoder Prenet
 					prenet = Prenet(is_training, layers_sizes=hp.prenet_layers, drop_rate=hp.tacotron_dropout_rate, scope='decoder_prenet')
@@ -203,7 +204,7 @@ class Tacotron():
 						decoder_lstm,
 						embedded_speaker_label,
 						embedded_language_label,
-						residual_encoding,
+						# residual_encoding,
 						frame_projection,
 						stop_projection)
 
@@ -417,7 +418,8 @@ class Tacotron():
 					self.tower_regularization_loss.append(regularization)
 					self.tower_linear_loss.append(linear_loss)
 					self.tower_adversarial_loss.append(adversarial_loss)
-					loss = before + after + stop_token_loss + regularization + linear_loss + hp.loss_weight * adversarial_loss + self.kl_div
+					# loss = before + after + stop_token_loss + regularization + linear_loss + hp.loss_weight * adversarial_loss + self.kl_div
+					loss = before + after + stop_token_loss + regularization + linear_loss + hp.loss_weight * adversarial_loss
 					self.tower_loss.append(loss)
 
 		for i in range(hp.tacotron_num_gpus):

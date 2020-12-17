@@ -212,7 +212,8 @@ def train(log_dir, args, hparams):
 			#Training loop
 			while not coord.should_stop() and step < args.tacotron_train_steps:
 				start_time = time.time()
-				step, loss, opt, D_mean, D_var = sess.run([global_step, model.loss, model.optimize, model.D_mean, model.D_var])
+				step, loss, opt = sess.run([global_step, model.loss, model.optimize])
+				# step, loss, opt, D_mean, D_var = sess.run([global_step, model.loss, model.optimize, model.D_mean, model.D_var])
 				# inputs_printout, inputs_tone_stress_printout, step, loss, opt, D_mean, D_var = sess.run([model.inputs_printout, model.inputs_tone_stress_printout, global_step, model.loss, model.optimize, model.D_mean, model.D_var])
 				# print('\n\n\n\n\n')
 				# print(inputs_printout)
@@ -222,7 +223,6 @@ def train(log_dir, args, hparams):
 				loss_window.append(loss)
 				message = 'Step {:7d} [{:.3f} sec/step, loss={:.5f}, avg_loss={:.5f}]'.format(
 					step, time_window.average, loss, loss_window.average)
-				print('D_mean: ',D_mean[0][0], 'D_var:',D_var[0][0], '\n')
 				log(message, end='\r', slack=(step % args.checkpoint_interval == 0))
 				if loss > 100 or np.isnan(loss):
 					log('Loss exploded to {:.5f} at step {}'.format(loss, step))

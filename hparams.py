@@ -137,14 +137,14 @@ hparams = tf.contrib.training.HParams(
 	language_dim=3,  # add same with encoder_output / concat
 	language_num=2,
 
-	# VAE
-	VAE_conv_num_layers=2,  # number of VAE convolutional layers
-	VAE_conv_kernel_size=(3, ),  # size of VAE convolution filters for each layer
-	VAE_conv_channels=512,  # number of VAE convolution filters for each layer
-	VAE_lstm_num_layers=2,
-	VAE_lstm_layer_size=256,
-    VAE_pool_size=512,
-	VAE_D_size=16,
+	# # VAE
+	# VAE_conv_num_layers=2,  # number of VAE convolutional layers
+	# VAE_conv_kernel_size=(3, ),  # size of VAE convolution filters for each layer
+	# VAE_conv_channels=512,  # number of VAE convolution filters for each layer
+	# VAE_lstm_num_layers=2,
+	# VAE_lstm_layer_size=256,
+    # VAE_pool_size=512,
+	# VAE_D_size=16,
 
 
 	#Attention mechanism
